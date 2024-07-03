@@ -35,9 +35,9 @@ public class FlutterMicrophoneControlPlugin: NSObject, FlutterPlugin {
       try session.setCategory(.playAndRecord, mode: .default, options: [])
       try session.setActive(true)
       if isEnabled {
-        session.setInputGain(1.0, error: nil) // Set input gain to normal
+        try session.setInputGain(1.0) // Set input gain to normal
       } else {
-        session.setInputGain(0.0, error: nil) // Mute the microphone
+        try session.setInputGain(0.0) // Mute the microphone
       }
       newMicrophoneState = !isEnabled
     } catch {
