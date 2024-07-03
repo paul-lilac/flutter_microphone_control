@@ -32,17 +32,17 @@ public class FlutterMicrophoneControlPlugin: NSObject, FlutterPlugin {
     let session = AVAudioSession.sharedInstance()
     var newMicrophoneState = isEnabled
     do {
-      try session.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
+      try session.setCategory(.playAndRecord, mode: .default, options: [])
       try session.setActive(true)
       if isEnabled {
-        try session.overrideOutputAudioPort(.none)
+        session.setInputGain(1.0, error: nil) // Set input gain to normal
       } else {
-        try session.overrideOutputAudioPort(.speaker)
+        session.setInputGain(0.0, error: nil) // Mute the microphone
       }
       newMicrophoneState = !isEnabled
     } catch {
       print("Failed to toggle microphone: \(error)")
-      newMicrophoneState = !newMicrophoneState // Revert state on failure
+      newMicrophoneState = isEnabled // Revert state on failure
     }
     return newMicrophoneState
   }
