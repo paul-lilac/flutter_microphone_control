@@ -18,13 +18,10 @@ abstract class FlutterMicrophoneControlPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  /// Toggles the microphone state on the native platform.
   Future<bool?> toggleMicrophone(bool isEnabled);
 
-  /// Checks microphone permission status on the native platform.
   Future<bool?> checkMicrophonePermission();
 
-  /// Retrieves the platform version from the native platform.
   Future<String?> getPlatformVersion();
 }
 
@@ -32,12 +29,14 @@ class MethodChannelFlutterMicrophoneControl
     extends FlutterMicrophoneControlPlatform {
   MethodChannelFlutterMicrophoneControl() : super();
 
+  static const MethodChannel _channel =
+      MethodChannel('flutter_microphone_control');
+
   @override
   Future<bool?> toggleMicrophone(bool isEnabled) async {
     try {
-      // Replace with actual implementation based on platform-specific code
-      bool? result = await const MethodChannel('flutter_microphone_control')
-          .invokeMethod('toggleMicrophone', isEnabled);
+      final bool? result = await _channel
+          .invokeMethod('toggleMicrophone', {'isEnabled': isEnabled});
       return result;
     } catch (e) {
       log('~~~Failed to toggle microphone: $e');
@@ -48,9 +47,8 @@ class MethodChannelFlutterMicrophoneControl
   @override
   Future<bool?> checkMicrophonePermission() async {
     try {
-      // Replace with actual implementation based on platform-specific code
-      bool? result = await const MethodChannel('flutter_microphone_control')
-          .invokeMethod('checkMicrophonePermission');
+      final bool? result =
+          await _channel.invokeMethod('checkMicrophonePermission');
       return result;
     } catch (e) {
       log('~~~Failed to check microphone permission: $e');
@@ -61,9 +59,7 @@ class MethodChannelFlutterMicrophoneControl
   @override
   Future<String?> getPlatformVersion() async {
     try {
-      // Replace with actual implementation based on platform-specific code
-      String? version = await const MethodChannel('flutter_microphone_control')
-          .invokeMethod('getPlatformVersion');
+      final String? version = await _channel.invokeMethod('getPlatformVersion');
       return version;
     } catch (e) {
       log('~~~Failed to get platform version: $e');

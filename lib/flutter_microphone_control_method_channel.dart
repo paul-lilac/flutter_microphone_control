@@ -3,10 +3,8 @@ import 'package:flutter/services.dart';
 
 import 'flutter_microphone_control_platform_interface.dart';
 
-/// An implementation of [FlutterMicrophoneControlPlatform] that uses method channels.
 class MethodChannelFlutterMicrophoneControl
     extends FlutterMicrophoneControlPlatform {
-  /// The method channel used to interact with the native platform.
   @visibleForTesting
   final MethodChannel methodChannel =
       const MethodChannel('flutter_microphone_control');
@@ -14,8 +12,8 @@ class MethodChannelFlutterMicrophoneControl
   @override
   Future<bool?> toggleMicrophone(bool isEnabled) async {
     try {
-      final bool? newState =
-          await methodChannel.invokeMethod<bool>('toggleMicrophone', isEnabled);
+      final bool? newState = await methodChannel
+          .invokeMethod<bool>('toggleMicrophone', {'isEnabled': isEnabled});
       return newState;
     } on PlatformException catch (e) {
       throw FlutterError('Failed to toggle microphone: ${e.message}');
